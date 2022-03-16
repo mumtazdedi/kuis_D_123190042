@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:kuis_1/app_store.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppDetail extends StatefulWidget {
   final AppStore detail;
@@ -16,6 +17,14 @@ class AppDetail extends StatefulWidget {
 class _AppDetailState extends State<AppDetail> {
   String _currentIndex = '';
   @override
+  _launchURL() async {
+    if (await canLaunch(widget.detail.appLink)) {
+      await launch(widget.detail.appLink);
+    } else {
+      throw 'Could not launch $widget.detail.appLink';
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -56,14 +65,12 @@ class _AppDetailState extends State<AppDetail> {
               ),
               CarouselSlider(
                 options: CarouselOptions(
-                  height: 200.0,
                   aspectRatio: 2.0,
+                  scrollDirection: Axis.horizontal,
                 ),
                 items: widget.detail.imageUrls.map((card) {
                   return Builder(builder: (BuildContext context) {
                     return Container(
-                      height: 100,
-                      width: 200,
                       child: Card(
                         color: Colors.blueAccent,
                         child: Image.network(card),
@@ -74,6 +81,14 @@ class _AppDetailState extends State<AppDetail> {
               ),
               SizedBox(height: 10),
               Text(widget.detail.description, textAlign: TextAlign.justify),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _launchURL,
+                child: Text('Download'),
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    textStyle: TextStyle(fontSize: 16)),
+              )
             ],
           ),
         ));
