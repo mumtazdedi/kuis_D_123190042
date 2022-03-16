@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kuis_1/app_store.dart';
+import 'package:kuis_1/app_detail.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -52,7 +53,11 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 onTap: () {
-                  print("Tapped on container");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return AppDetail(
+                      detail: appOne,
+                    );
+                  }));
                 },
               ),
             );
